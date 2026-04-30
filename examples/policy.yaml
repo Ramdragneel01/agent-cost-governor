@@ -1,0 +1,22 @@
+pricing:
+  gpt-4o:        { input_per_1k: 0.005,   output_per_1k: 0.015 }
+  gpt-4o-mini:   { input_per_1k: 0.00015, output_per_1k: 0.0006 }
+  claude-3.5-sonnet: { input_per_1k: 0.003, output_per_1k: 0.015 }
+  claude-3.5-haiku:  { input_per_1k: 0.0008, output_per_1k: 0.004 }
+
+defaults:
+  daily_budget_usd: 5.0
+  block_at_pct: 1.0
+  alert_at_pct: 0.8
+
+tenants:
+  acme:
+    daily_budget_usd: 50
+    block_at_pct: 1.0
+    alert_at_pct: 0.8
+    downgrade:
+      - { from: gpt-4o, to: gpt-4o-mini, when: budget_pct >= 0.8 }
+      - { from: claude-3.5-sonnet, to: claude-3.5-haiku, when: budget_pct >= 0.8 }
+  experiments:
+    daily_budget_usd: 2
+    alert_at_pct: 0.5

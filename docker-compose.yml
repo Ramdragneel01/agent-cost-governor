@@ -1,0 +1,25 @@
+services:
+  agent-cost-governor:
+    build: .
+    image: ghcr.io/ramdragneel01/agent-cost-governor:dev
+    container_name: agent-cost-governor
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    environment:
+      ACG_HOST: 0.0.0.0
+      ACG_PORT: 8090
+      ACG_LOG_LEVEL: INFO
+      ACG_UPSTREAM_BASE_URL: ${ACG_UPSTREAM_BASE_URL:-https://api.openai.com}
+      ACG_UPSTREAM_API_KEY: ${ACG_UPSTREAM_API_KEY:-}
+      ACG_POLICY_PATH: /policy/policy.yaml
+      ACG_TENANT_HEADER: x-acg-tenant
+      ACG_DEFAULT_TENANT: default
+      ACG_ALERT_WEBHOOK_URL: ${ACG_ALERT_WEBHOOK_URL:-}
+    volumes:
+      - ./examples/policy.yaml:/policy/policy.yaml:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8090/health',timeout=3).status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
