@@ -5,3 +5,12 @@
 *.gif binary
 *.webp binary
 *.pdf binary
+
+
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.pdf binary
